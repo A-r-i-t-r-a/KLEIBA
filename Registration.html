@@ -1,0 +1,61 @@
+<?php
+$errors=array();
+if(isset($_POST['login'])){
+    $username=preg_replace('/[^A-Za-z]/','',$_POST['username'];
+    $email=$_POST['email'];
+    $password=$_POST['password'];
+    $c_password=$_POST['c_password'];
+    if(!file_exists('users/' .$username.'.xml')){
+        $errors[]='Username exists already';
+    }
+    if($email=''){
+        $errors[]='Email is blank';
+        
+    }
+    if($password='' || $c_password=''){
+        $errors[]='password is blank';
+    }
+    if($password!= $c_password){
+        $errors='Passwords donot match';
+    }
+    if(count($errors)==0){
+        $xml=newSimpleXMLElement('<user></user>');
+        $xml->assChild("password",md5($password));
+        $xml->addChild('email,$email');
+        $xml->asXML('user'. $username . '.xml');
+        header("Location: login.php");
+        die; 
+    }
+
+}
+
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML1.0 Transitional // EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title> Register </title>
+
+</head>
+<body>
+    <h1> Register</h1>
+    <form methord="post" action="">
+        <?php
+        if(count($errors)>0)
+        {
+            echo'<ul>';
+            foreach ($errors as $e) {
+                echo '<li>' .$e . ;
+            }
+            echo'</ul>'
+        }
+        <p>Username<input type="text" name="username" size="20" /></p>
+        <p>Email<input type="text" name="email" size="20" /></p>
+        <p>Password<input type="passwordt" name="password" size="20" /></p>
+        <p>Confirm Password<input type="password" name="c_password" size="20" /></p>
+        <p><input type="submit" name ="login" value="login" /></p>
+    </form>
+
+</body>
+</html>
